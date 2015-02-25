@@ -62,6 +62,12 @@ DATABASES = {
         'NAME': 'detectweb_db',
         'USER': 'detectweb',
         'PASSWORD': '',
+    },
+    'test': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'test_detectweb_db',
+        'USER': 'detectweb',
+        'PASSWORD': '',
     }
 }
 
