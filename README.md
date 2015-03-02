@@ -33,6 +33,19 @@ issuing the following command:
 See more [here](https://docs.djangoproject.com/en/1.7/ref/django-admin/#django-admin-makemigrations);
 
 
+# Celery
+
+To run the server, run this command:
+
+    celery -A detectweb worker --loglevel=info
+
+Once the celery server is running, you can run a job:
+
+```
+from detectweb.tasks import do_matlab
+a = do_matlab.delay('test')
+```
+
 # Running tests
 
     python manage.py test
