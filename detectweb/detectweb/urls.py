@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
-from . import views
+from detectweb.reports import views as reports_views
 
 urlpatterns = patterns('',
     # Examples:
@@ -9,8 +9,9 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', views.image_drop_box),
-    url(r'^upload/$', views.upload_images),
-    url(r'^reports/$', views.index_reports),
-    url(r'^reports/(?P<report_id>\d+)/$', views.show_reports),
+
+    url(r'^$', reports_views.image_drop_box),
+    url(r'^upload/$', reports_views.upload_images),
+    url(r'^reports/$', reports_views.index_reports),
+    url(r'^reports/(?P<report_id>\d+)/$', reports_views.show_reports),
 )
