@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Haha</title>
+  <title>Image dropbox</title>
 </head>
 <body>
 
-<form action="{% url 'upload_images' %}" method="post">
-{% csrf_token %}
-<label for="{{name}}">{{name}}</label><br/>
-<input type="text" name="{{name}}"/><br/>
-<input type="submit" value="Vote"/>
+<form action="{% url 'upload_images' %}" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form }}
+  <input type="submit" value="Submit"/>
 </form>
 
 </body>
