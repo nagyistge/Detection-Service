@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 from django.template import RequestContext, loader
 
 from django.views.decorators.http import require_http_methods, require_POST, require_GET
@@ -26,8 +25,8 @@ def upload_images(request):
 
 @require_GET
 def index_reports(request):
-    html = "<html><body>index</body></html>"
-    return HttpResponse(html)
+    reports = Report.objects.all()
+    return render(request, 'reports/index_reports.html', {'reports': reports})
 
 @require_GET
 def show_reports(request, **params):
