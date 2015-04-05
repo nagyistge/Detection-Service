@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Haha</title>
+</head>
+<body>
+
+<form action="{% url 'upload_images' %}" method="post">
+{% csrf_token %}
+<label for="{{name}}">{{name}}</label><br/>
+<input type="text" name="{{name}}"/><br/>
+<input type="submit" value="Vote"/>
+</form>
+
+</body>
+</html>
