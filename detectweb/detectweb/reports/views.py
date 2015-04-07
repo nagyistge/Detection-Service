@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template import RequestContext, loader
 
 from django.views.decorators.http import require_http_methods, require_POST, require_GET
@@ -19,7 +19,7 @@ def upload_images(request):
         report = Report(image_file=request.FILES['image'])
         report.save()
         # Start salary job!
-        return render(request, 'reports/show_reports.html', {'report': report})
+        return redirect('show_reports', report_id=report.id)
     else:
         return render(request, 'reports/image_drop_box.html', {'form': form})
 
@@ -31,4 +31,6 @@ def index_reports(request):
 @require_GET
 def show_reports(request, **params):
     report = Report.objects.get(id=params['report_id'])
+
+    # Add static page.
     return render(request, 'reports/show_reports.html', {'report': report})

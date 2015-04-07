@@ -1,2 +1,11 @@
-*.pyc
 .DS_Store
+uploaded_images
+
+# Created by https://www.gitignore.io
+
+### Django ###
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
