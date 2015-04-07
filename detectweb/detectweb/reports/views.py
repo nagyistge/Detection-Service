@@ -31,6 +31,7 @@ def index_reports(request):
 @require_GET
 def show_reports(request, **params):
     report = Report.objects.get(id=params['report_id'])
-
-    # Add static page.
-    return render(request, 'reports/show_reports.html', {'report': report})
+    if report.is_finished:
+        return render(request, 'reports/show_reports.html', {'report': report})
+    else:
+        return render(request, 'reports/not_finished.html', {'report': report})
