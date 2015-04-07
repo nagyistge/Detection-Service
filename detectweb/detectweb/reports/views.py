@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from django.shortcuts import render, redirect
 from django.template import RequestContext, loader
 
@@ -5,6 +7,8 @@ from django.views.decorators.http import require_http_methods, require_POST, req
 
 from detectweb.reports.models import Report
 from detectweb.reports.forms import UploadImageForm
+
+from detectweb.tasks import generate_report
 
 @require_GET
 def image_drop_box(request):
@@ -18,7 +22,7 @@ def upload_images(request):
     if form.is_valid():
         report = Report(image_file=request.FILES['image'])
         report.save()
-        # Start salary job!
+        generate_report.delay(report=report)
         return redirect('show_reports', report_id=report.id)
     else:
         return render(request, 'reports/image_drop_box.html', {'form': form})
