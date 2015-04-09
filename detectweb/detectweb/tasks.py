@@ -3,7 +3,7 @@ from __future__ import absolute_import
 from detectweb.celery import app
 from celery.utils.log import get_task_logger
 
-from image_analyzer import ImageAnalyzer
+from detectweb.image_analyzer import ImageAnalyzer
 import time
 
 @app.task

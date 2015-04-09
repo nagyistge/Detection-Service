@@ -31,7 +31,7 @@ class ImageAnalyzer(object):
     def _do_copy_move(self, img_file):
         c = copymove.CopyMoveDetector(self.eng)
         ransac_img, ransac_matches = c.detect(img_file)
-        # TODO: save points to db.
+        self.report.cm_matches = ransac_matches
         return ransac_img
 
     def _do_ela(self, img_file):
@@ -39,10 +39,10 @@ class ImageAnalyzer(object):
         return numpy2matlb(e.ela_image_scaled.astype(np.double))
 
     def _do_higher_order(self, img_file):
-        pass
+        return None
 
     def _do_aggregator(self, cm_result, ela_result, ho_result):
-        pass
+        return None
 
     def _do_classifier(self, feature):
-        pass
+        return 100
