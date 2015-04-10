@@ -1,5 +1,7 @@
 from __future__ import absolute_import
 
+import os
+
 from django.db import models
 from jsonfield import JSONField
 import collections
@@ -27,6 +29,10 @@ class Report(models.Model):
     has_software_manipulation = models.NullBooleanField()
     height = models.PositiveIntegerField(null=True)
     width = models.PositiveIntegerField(null=True)
+
+    @property
+    def directory(self):
+        return os.path.dirname(self.file_path)
 
     @property
     def file_path(self):
