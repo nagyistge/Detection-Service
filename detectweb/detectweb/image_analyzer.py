@@ -4,7 +4,8 @@ import numpy as np
 
 import matlab.engine
 
-from imforensics.util import numpy2matlb
+from imforensics.util import numpy2matlab
+from imforensics import higherorderstats
 from imforensics import ela
 from imforensics import copymove
 from imforensics import metadata
@@ -38,10 +39,11 @@ class ImageAnalyzer(object):
     def _do_ela(self, img_file):
         e = ela.ELA(img_file)
         e.save_ela_image()
-        return numpy2matlb(e.ela_image_scaled.astype(np.double))
+        return numpy2matlab(e.ela_image_scaled.astype(np.double))
 
     def _do_higher_order(self, img_file):
-        return None
+        h = higherorderstats.HigherOrderStatsDetector(self.eng)
+        return h.detect(img_file)
 
     def _do_metadata(self, img_file):
         er = metadata.ExifReport(img_file).process()
