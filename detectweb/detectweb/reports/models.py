@@ -5,16 +5,19 @@ import os
 from django.db import models
 from jsonfield import JSONField
 import collections
-import uuid
 import json
 
+UPLOADED_IMAGE_DIR = 'uploaded_images'
+
 def uploaded_file_name(instance, filename):
-    return '/'.join(['uploaded_images', str(uuid.uuid4()), filename]);
+    return '/'.join([UPLOADED_IMAGE_DIR,
+                     instance.md5_hex_digest,
+                     filename]);
 
 # Create your models here.
 class Report(models.Model):
-    # Length 36 uuid.
     image_file = models.FileField(upload_to=uploaded_file_name)
+    md5_hex_digest = models.CharField(max_length=32, unique=True, default=None)
 
     is_finished = models.BooleanField(default=False)
     score = models.FloatField(null=True)
@@ -29,6 +32,11 @@ class Report(models.Model):
     has_software_manipulation = models.NullBooleanField()
     height = models.PositiveIntegerField(null=True)
     width = models.PositiveIntegerField(null=True)
+
+    @classmethod
+    def find_by_md5(cls, digest):
+        results = cls.objects.filter(md5_hex_digest=digest)
+        return results[0] if results else None
 
     @property
     def directory(self):

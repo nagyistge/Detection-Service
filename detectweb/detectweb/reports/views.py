@@ -10,6 +10,8 @@ from detectweb.reports.forms import UploadImageForm
 
 from detectweb.tasks import generate_report
 
+from detectweb.util import get_md5_hex
+
 @require_GET
 def image_drop_box(request):
     form = UploadImageForm()
@@ -20,10 +22,17 @@ def upload_images(request):
     form = UploadImageForm(request.POST, request.FILES)
 
     if form.is_valid():
-        report = Report(image_file=request.FILES['image'])
-        report.save()
-        generate_report.delay(report=report)
-        return redirect('show_reports', report_id=report.id)
+        img = request.FILES['image']
+        img_md5 = get_md5_hex(img)
+        report = Report.find_by_md5(img_md5)
+        if report:
+            return redirect('show_reports', report_id=report.id)
+        else:
+            report = Report(image_file=img,
+                            md5_hex_digest=img_md5)
+            report.save()
+            generate_report.delay(report=report)
+            return redirect('show_reports', report_id=report.id)
     else:
         return render(request, 'reports/image_drop_box.html', {'form': form})
 
