@@ -7,6 +7,7 @@ import matlab.engine
 from imforensics.util import numpy2matlb
 from imforensics import ela
 from imforensics import copymove
+from imforensics import metadata
 
 class ImageAnalyzer(object):
 
@@ -36,10 +37,14 @@ class ImageAnalyzer(object):
 
     def _do_ela(self, img_file):
         e = ela.ELA(img_file)
+        e.save_ela_image()
         return numpy2matlb(e.ela_image_scaled.astype(np.double))
 
     def _do_higher_order(self, img_file):
         return None
+
+    def _do_metadata(self, img_file):
+        pass
 
     def _do_aggregator(self, cm_result, ela_result, ho_result):
         return None
