@@ -69,6 +69,11 @@ class Report(models.Model):
         return json.dumps(self.cm_matches)
 
     @property
+    def cm_num_matches(self):
+        """Return the number of copymove matches."""
+        return len(self.cm_matches['source'])
+
+    @property
     def exif_as_json(self):
         return json.dumps(self.exif)
 

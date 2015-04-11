@@ -85,7 +85,7 @@
             <p class="lead">We were unable to find any interesting metadata information on this image.</p>
             {% endif %}
 
-            <p>What's metadata? Metadata is the information stored that describes the photo. Untampered images that are from the camera source will contain certain metadata attributes that are part of the EXIF metadata specification. When an image is resaved in software or on the Internet, the metadata can be removed and/or modified. Hence, we can use this metadata information to check if the image in question has been resaved through other software.</p>
+            <p>What's metadata? Metadata is the information stored that describes the photo. Un-tampered images that are from the camera source will contain certain metadata attributes that are part of the EXIF metadata specification. When an image is resaved in software or on the Internet, the metadata can be removed and/or modified. Hence, we can use this metadata information to check if the image in question has been resaved through other software.</p>
             <br/>
             <br/>
           </div>
@@ -148,7 +148,21 @@
         <div class="row">
           <div class="col-sm-12">
             <h4>Copy-Move Detection</h4>
-            <p class="lead">We found a suspicious number of correlated regions.</p>
+            {% if report.cm_num_matches > 50 %}
+              <p class="lead">We found a suspicious number of correlated regions.</p>
+            {% elif report.cm_num_matches > 10 %}
+              <p class="lead">We found a some number of correlated regions.</p>
+            {% else %}
+              <p class="lead">We were unable to find a significant number of correlated regions.</p>
+            {% endif %}
+
+            <p>Copy-Move forgery is one of the most common types of image manipulation attacks. The attack involves
+            resampling portions of the same image onto other portions of the image to alter the context and even
+            enhance the picture. We've developed novel and robust algorithms to detect this attack.</p>
+
+            <div id="copy-move-vis">
+              <img src="{{ report.original_image_url }}" alt="Copy move detection" />
+            </div>
           </div>
         </div>
 
@@ -181,7 +195,76 @@
     <script src="{% static "assets/js/bootstrap.min.js" %}"></script>
 
     <script>
+    var cmData = {{ report.cm_matches_as_json | safe }};
+
+    var convertDataToPairs = function (data, scale) {
+        var pairs = [];
+
+        var c = function (d) {
+          return {'x': d.x * scale, 'y': d.y * scale};
+        };
+
+        var sources = data.source.map(function(d) { return c(d); });
+        var targets = data.target.map(function(d) { return c(d); });
+
+        for (var i = 0; i < data.source.length; i++ ) {
+            pairs.push({
+              'points': [
+                  sources[i],
+                  targets[i]
+              ]
+            });
+        }
+      console.log(pairs);
+        return pairs;
+    };
+
+    var lineGen = d3.svg.line()
+      .x(function(d) { return d.x; })
+      .y(function(d) { return d.y; })
+      .interpolate("linear");
+
+    var drawLines = function (data, imSize, scale)  {
+      var svg = d3.select('#copy-move-vis').append('svg')
+        .attr('height', imSize.height)
+        .attr('width', imSize.width)
+        .style('position', 'absolute')
+        .style('top', '0')
+        .style('left', '0');
+
+       var lines = svg.selectAll('.lines')
+        .data(convertDataToPairs(data, scale));
+
+       var linesEnter = lines.enter();
+
+       linesEnter.append('circle')
+           .attr('cx', function(d) { return d.points[0].x })
+           .attr('cy', function(d) { return d.points[0].y })
+           .attr('r', 2)
+           .attr('fill', 'yellow');
+
+       linesEnter.append('path')
+           .attr('class', 'lines')
+           .attr('stroke', 'yellow')
+           .attr('stroke-width', 1)
+           .attr('d', function(d) { return lineGen(d.points);});
+
+
+       linesEnter.append('circle')
+           .attr('cx', function(d) { return d.points[1].x })
+           .attr('cy', function(d) { return d.points[1].y })
+           .attr('r', 2)
+           .attr('fill', 'yellow');
+
+    };
+
     $(document).ready(function() {
+      var im = d3.select('#copy-move-vis img').node();
+      var imSize = im.getBoundingClientRect();
+
+      var originalWidth = im.naturalWidth;
+      var scaling = parseFloat(imSize.width) / parseFloat(originalWidth);
+      drawLines(cmData, imSize, scaling);
     });
     </script>
   </body>
