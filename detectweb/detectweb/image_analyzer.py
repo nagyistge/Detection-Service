@@ -4,16 +4,12 @@ import numpy as np
 
 import matlab.engine
 
+from imforensics import *
 from imforensics.util import numpy2matlab, is_jpeg
-from imforensics import higherorderstats
-from imforensics import ela
-from imforensics import copymove
-from imforensics import metadata
-from imforensics import doublejpeg
 
 class ImageAnalyzer(object):
 
-    def __init__(self, logger):
+    def __init__(self, logger=None):
         self.eng = matlab.engine.start_matlab()
         self.logger = logger
 
@@ -34,26 +30,26 @@ class ImageAnalyzer(object):
         self.eng.quit()
 
     def _do_copy_move(self, img_file):
-        self.logger.info('------Doing copy move------')
+        self._log('------Doing copy move------')
         c = copymove.CopyMoveDetector(self.eng)
         ransac_img, ransac_matches = c.detect(img_file)
         self.report.cm_matches = ransac_matches
         return ransac_img
 
     def _do_ela(self, img_file):
-        self.logger.info('------Doing ela------')
+        self._log('------Doing ela------')
         e = ela.ELA(img_file)
         e.save_ela_image()
         return numpy2matlab(e.ela_image_scaled.astype(np.double))
 
     def _do_higher_order(self, img_file):
-        self.logger.info('------Doing higher order stats------')
+        self._log('------Doing higher order stats------')
         h = higherorderstats.HigherOrderStatsDetector(self.eng)
         return h.detect(img_file)
 
     def _do_metadata(self, img_file):
         if is_jpeg(img_file):
-            self.logger.info('------Doing metadata------')
+            self._log('------Doing metadata------')
             er = metadata.ExifReport(img_file).process()
             self.report.exif = er['exif']
             self.report.has_camera_attrs = er['results']['has_camera_attrs']
@@ -65,12 +61,20 @@ class ImageAnalyzer(object):
 
     def _do_double_jpeg(self, img_file):
         if is_jpeg(img_file):
-            self.logger.info('------Doing double jpeg------')
+            self._log('------Doing double jpeg------')
             d = doublejpeg.DoubleJPEGCompressionDetector(self.eng)
             d.detect(img_file)
 
     def _do_aggregator(self, cm_result, ela_result, ho_result):
-        return None
+        self._log('------Doing aggregating------')
+        a = aggregator.Aggregator(self.eng)
+        return a.aggregate(cm_result, ela_result, ho_result)
 
     def _do_classifier(self, feature):
         self.report.score = 100
+
+    def _log(self, msg):
+        if self.logger:
+            self.logger.info(msg)
+        else:
+            print msg
