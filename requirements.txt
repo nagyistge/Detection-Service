@@ -10,3 +10,4 @@ psycopg2==2.6
 pytz==2014.10
 wsgiref==0.1.2
 jsonfield==1.0.3
+Pillow==2.8.1

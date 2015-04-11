@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- other meta tags -->
+    <meta name="description" content="" />
+    <meta name="author" content="Omar Ramadan, Anthony Sutardja, Yan Zhao" />
+
+    <!-- Style sheets -->
+    <link href="./static/assets/css/bootstrap.css" rel="stylesheet" />
+    <link href="./static/css/main.css" rel="stylesheet" />
+
+    <title>Report Processing</title>
+  </head>
+  <body>
+    <!-- Header -->
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">DIMF</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main content -->
+    <div class="content-info">
+      <div class="container">
+        <!-- Report identification information -->
+        <div class="row">
+          <div class="col-sm-9 info-name">
+            <p class="description">Filename</p>
+            <h4 class="circle-status-wait">My_image.jpg</h4>
+          </div>
+          <div class="col-sm-3 info-date">
+            <p class="description">Uploaded on</p>
+            <h4>April 10, 2015</h4>
+          </div>
+        </div>
+
+        <!-- Uploaded Image -->
+        <div class="row image-inspector">
+          <div class="col-sm-12">
+            <div class="image-holder">
+              <img class="inactive" src="./static/imgs/a.JPG" alt=""/>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <h3>We're still processing your image.. hang tight!</h3>
+            <p class="lead description">Our analysis typically takes around 5-10 minutes per image.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- More results snippet -->
+    <div class="more-bar">
+      <a href="#">View more of our results &raquo;</a>
+    </div>
+
+
+    <!-- Footer snippet -->
+    <div class="footer">
+      <small>An M.Eng. capstone project by Omar Ramadan, Anthony Sutardja, and Yan Zhao.</small>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+    <script src="./static/assets/js/holder.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="./static/assets/js/bootstrap.min.js"></script>
+
+    <script>
+    $(document).ready(function() {
+      var im = d3.select('.image-inspector img');
+      var nodeBox = im.node().getBoundingClientRect();
+
+      // Initialize the line
+      var line = d3.select('.image-holder').append('div')
+        .attr('class', 'image-scan-line')
+        .style('height', nodeBox.height + 'px')
+        .style('width', '5px')
+        .style('left', '0px');
+
+      var onLeft = true;
+
+      // Scan motion function
+      var scanMotion = function() {
+        var movePosition = onLeft ? nodeBox.width : 0;
+        line.transition().duration(2000)
+          .style('left', movePosition + 'px');
+        onLeft = !onLeft;
+      }
+
+      // Run every 2 seconds
+      setInterval(scanMotion, 2000);
+
+      // Kick off the first one
+      scanMotion();
+    });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- other meta tags -->
+    <meta name="description" content="" />
+    <meta name="author" content="Omar Ramadan, Anthony Sutardja, Yan Zhao" />
+
+    <!-- Style sheets -->
+    <link href="./static/assets/css/bootstrap.css" rel="stylesheet" />
+    <link href="./static/css/main.css" rel="stylesheet" />
+
+    <title>Report on image</title>
+  </head>
+  <body>
+    <!-- Header -->
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">DIMF</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main content -->
+    <div class="content-info">
+      <div class="container">
+        <!-- Report identification information -->
+        <div class="row">
+          <div class="col-sm-9 info-name">
+            <p class="description">Filename</p>
+            <h4 class="circle-status-done">My_image.jpg</h4>
+          </div>
+          <div class="col-sm-3 info-date">
+            <p class="description">Uploaded on</p>
+            <h4>April 10, 2015</h4>
+          </div>
+        </div>
+
+        <!-- Uploaded Image -->
+        <div class="row image-inspector">
+          <div class="col-sm-12">
+            <div class="image-holder">
+              <img src="./static/imgs/a.JPG" alt=""/>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row results">
+          <div class="col-sm-12">
+            <h3>Results</h3>
+            <p class="lead">From our analysis, we believe that this image is a <strong>strong candidate</strong> for being classified as having undergone manipulation by some software.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Analysis -->
+    <div class="analysis">
+      <div class="container">
+        <!-- Header -->
+        <div class="row">
+          <div class="col-sm-12"><h3>Analysis</h3></div>
+        </div>
+
+        <!-- Metadata -->
+        <div class="row">
+          <div class="col-sm-12">
+            <h4>Metadata</h4>
+            <p class="lead">We did not see any strong indications of tampering due to the metadata.</p>
+
+            <p>What's metadata? Metadata is the information stored that describes the photo. Untampered images that are from the camera source will contain certain metadata attributes that are part of the EXIF metadata specification. When an image is resaved in software or on the Internet, the metadata can be removed and/or modified. Hence, we can use this metadata information to check if the image in question has been resaved through other software.</p>
+            <br/>
+            <br/>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4">
+            <table class="table small">
+              <tr><td class="b">Make</td><td>Canon</td></tr>
+              <tr><td class="b">Model</td><td>Canon EOS REBEL T1i</td></tr>
+              <tr><td class="b">DateTimeOriginal</td><td>2015:03:20 21:19:23</td></tr>
+              <tr><td class="b">F Number</td><td>9.2</td></tr>
+              <tr><td class="b">ISOSpeedRatings</td><td>1600</td></tr>
+              <tr><td class="b">Metering Mode</td><td>5</td></tr>
+              <tr><td class="b">Focal Length</td><td>1/35</td></tr>
+              <tr><td class="b">Height</td><td>800 pixels</td></tr>
+              <tr><td class="b">Width</td><td>600 pixels</td></tr>
+              <tr><td class="b">Software</td><td>Photos 1.0</td></tr>
+            </table>
+          </div>
+          <div class="col-sm-8">
+            <ul class="detection-checklist">
+              <li class="good">No detection of software manipulation.</li>
+              <li class="good">Has expected camera EXIF attributes.</li>
+              <!--
+              <li class="good">No image size mismatch in metadata.</li>
+              <li class="good">No indication of cropping or resizing.</li>
+              <li class="bad">Detected software manipulation.</li>
+              <li class="bad">Missing some camera EXIF attributes.</li>-->
+              <li class="bad">Inconsistent image size information.</li>
+              <li class="bad">Detected cropping and/or resizing.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- ELA -->
+        <div class="row">
+          <div class="col-sm-12">
+            <h4>Error Level Analysis</h4>
+            <p class="lead">We were unable to find anything of importance in the ELA analysis.</p>
+          </div>
+        </div>
+
+        <!-- CopyMove -->
+        <div class="row">
+          <div class="col-sm-12">
+            <h4>Copy-Move Detection</h4>
+            <p class="lead">We found a suspicious number of correlated regions.</p>
+          </div>
+        </div>
+
+        <!-- Higher Order -->
+        <div class="row">
+          <div class="col-sm-12">
+            <h4>Higher Order Statistics</h4>
+            <p class="lead">Did we find some shit here? FUCK YEAH</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- More results snippet -->
+    <div class="more-bar">
+      <a href="#">View more of our results &raquo;</a>
+    </div>
+
+
+    <!-- Footer snippet -->
+    <div class="footer">
+      <small>An M.Eng. capstone project by Omar Ramadan, Anthony Sutardja, and Yan Zhao.</small>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+    <script src="./static/assets/js/holder.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="./static/assets/js/bootstrap.min.js"></script>
+
+    <script>
+    $(document).ready(function() {
+    });
+    </script>
+  </body>
+<
