@@ -36,6 +36,8 @@ class Report(models.Model):
     height = models.PositiveIntegerField(null=True)
     width = models.PositiveIntegerField(null=True)
 
+    ELA_IMG_SUFFIX = '.ela.png'
+
     @classmethod
     def find_by_md5(cls, digest):
         results = cls.objects.filter(md5_hex_digest=digest)
@@ -53,10 +55,7 @@ class Report(models.Model):
     @property
     def base_path(self):
         """Returns the base path of the images for this report."""
-        return u'{media_base}/{base_path}/'.format(
-            media_base=settings.MEDIA_URL,
-            base_path=self.md5_hex_digest,
-        )
+        return os.path.join(settings.MEDIA_URL, self.md5_hex_digest)
 
     @property
     def file_path(self):
@@ -75,6 +74,10 @@ class Report(models.Model):
     def original_image_url(self):
         """Return the full URL to the primary image of this report."""
         return self.image_file.url
+
+    @property
+    def ela_image_url(self):
+        return self.original_image_url + Report.ELA_IMG_SUFFIX
 
     @property
     def to_url(self):
