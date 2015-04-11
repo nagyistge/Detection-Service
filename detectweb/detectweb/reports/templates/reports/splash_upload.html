@@ -1,0 +1,65 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- other meta tags -->
+    <meta name="description" content="" />
+    <meta name="author" content="Omar Ramadan, Anthony Sutardja, Yan Zhao" />
+
+    <!-- Style sheets -->
+    <link href="{% static "assets/css/bootstrap.css" %}" rel="stylesheet" />
+    <link href="{% static "css/main.css" %}" rel="stylesheet" />
+
+    <title>DIMF</title>
+  </head>
+  <body>
+    <div class="splash-wrapper">
+      <div class="box">
+        <h1>DIMF</h1>
+        <small>Digital Image Manipulation Forensics</small>
+        <div class="upload-container">
+
+          <form id="upload-form" action="{% url 'upload_images' %}" method="post" enctype="multipart/form-data">
+
+            {% csrf_token %}
+            <button type="button" class="btn btn-default">
+              Upload &amp; Analyze
+              {{ form.image }}
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="more-bar">
+      <a href="#">View more of our results &raquo;</a>
+    </div>
+
+    <div class="masonry">
+      <!--<div class="m-item"><a href="#"><img src="" alt="" /></a></div>-->
+    </div>
+
+    <div class="footer">
+      <small>An M.Eng. capstone project by Omar Ramadan, Anthony Sutardja, and Yan Zhao.</small>
+    </div>
+    <!-- JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.0/masonry.pkgd.min.js"></script>
+    <script src="{% static "assets/js/bootstrap.min.js" %}"></script>
+    <script>
+    $(document).ready(function() {
+      var masonryContainer = document.querySelector('.masonry');
+      var msnry = new Masonry(masonryContainer, {
+        itemSelector: '.m-item'
+      });
+      $('input[name=image].upload-field').change(function() {
+        $('#upload-form').submit();
+      });
+    });
+    </script>
+  </body>
+</html>

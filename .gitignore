@@ -9,3 +9,7 @@ uploaded_images
 *.pyc
 __pycache__/
 local_settings.py
+
+
+# Don't store collected static files
+detectweb/static

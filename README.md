@@ -12,6 +12,11 @@ The following will install all python dependencies, setup the database user & db
 
     ./bootstrap.sh
 
+## Static files
+Before running the django server, you'll need to run the static files.
+
+    python manage.py collectstatic
+
 
 # Running the server
 The actual Django project lives in the `detectweb` directory. You can run the web application locally by running the following:
