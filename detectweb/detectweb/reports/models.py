@@ -10,7 +10,6 @@ from jsonfield import JSONField
 import collections
 import json
 
-
 def uploaded_file_name(instance, filename):
     return '/'.join([
          instance.md5_hex_digest,
@@ -21,6 +20,7 @@ def uploaded_file_name(instance, filename):
 class Report(models.Model):
     image_file = models.FileField(upload_to=uploaded_file_name)
     md5_hex_digest = models.CharField(max_length=32, unique=True, default=None)
+    uploaded_at = models.DateTimeField(auto_now_add=True, null=True)
 
     is_finished = models.BooleanField(default=False)
     score = models.FloatField(null=True)
