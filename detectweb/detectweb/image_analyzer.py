@@ -4,7 +4,7 @@ import numpy as np
 
 import matlab.engine
 
-from imforensics.util import numpy2matlab
+from imforensics.util import numpy2matlab, is_jpeg
 from imforensics import higherorderstats
 from imforensics import ela
 from imforensics import copymove
@@ -46,14 +46,15 @@ class ImageAnalyzer(object):
         return h.detect(img_file)
 
     def _do_metadata(self, img_file):
-        er = metadata.ExifReport(img_file).process()
-        self.report.exif = er['exif']
-        self.report.has_camera_attrs = er['results']['has_camera_attrs']
-        self.report.has_crop_resize = er['results']['has_crop_resize']
-        self.report.has_size_mismatch = er['results']['has_size_mismatch']
-        self.report.has_software_manipulation = er['results']['has_software_manipulation']
-        self.report.height = er['im']['height']
-        self.report.width = er['im']['width']
+        if is_jpeg(img_file):
+            er = metadata.ExifReport(img_file).process()
+            self.report.exif = er['exif']
+            self.report.has_camera_attrs = er['results']['has_camera_attrs']
+            self.report.has_crop_resize = er['results']['has_crop_resize']
+            self.report.has_size_mismatch = er['results']['has_size_mismatch']
+            self.report.has_software_manipulation = er['results']['has_software_manipulation']
+            self.report.height = er['im']['height']
+            self.report.width = er['im']['width']
 
     def _do_aggregator(self, cm_result, ela_result, ho_result):
         return None
