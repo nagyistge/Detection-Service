@@ -2,17 +2,19 @@ from __future__ import absolute_import
 
 import os
 
+from django.conf import settings
 from django.db import models
+
 from jsonfield import JSONField
 import collections
 import json
 
-UPLOADED_IMAGE_DIR = 'uploaded_images'
 
 def uploaded_file_name(instance, filename):
-    return '/'.join([UPLOADED_IMAGE_DIR,
-                     instance.md5_hex_digest,
-                     filename]);
+    return '/'.join([
+         instance.md5_hex_digest,
+         filename,
+    ])
 
 # Create your models here.
 class Report(models.Model):
@@ -43,9 +45,21 @@ class Report(models.Model):
         return os.path.dirname(self.file_path)
 
     @property
+    def base_path(self):
+        return '{media_base}/{base_path}/'.format(
+            media_base=settings.MEDIA_URL,
+            base_path=self.md5_hex_digest,
+        )
+
+    @property
     def file_path(self):
-        return self.image_file.url
+        """Return the file path to the image on disk."""
+        return self.image_file.path
 
     @property
     def cm_matches_as_json(self):
         return json.dumps(self.cm_matches)
+
+    @property
+    def original_image_url(self):
+        return self.image_file.url

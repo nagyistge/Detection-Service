@@ -15,7 +15,11 @@ from detectweb.util import get_md5_hex
 @require_GET
 def image_drop_box(request):
     form = UploadImageForm()
-    return render(request, 'reports/splash_upload.html', {'form': form})
+    return render(
+        request,
+        'reports/splash_upload.html',
+        {'form': form}
+    )
 
 @require_POST
 def upload_images(request):
