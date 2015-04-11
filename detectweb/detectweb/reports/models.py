@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
 import os
@@ -41,13 +42,18 @@ class Report(models.Model):
         return results[0] if results else None
 
     @property
+    def image_name(self):
+        """Return the image name."""
+        return os.path.split(self.image_file.name)[-1]
+
+    @property
     def directory(self):
         return os.path.dirname(self.file_path)
 
     @property
     def base_path(self):
         """Returns the base path of the images for this report."""
-        return '{media_base}/{base_path}/'.format(
+        return u'{media_base}/{base_path}/'.format(
             media_base=settings.MEDIA_URL,
             base_path=self.md5_hex_digest,
         )
@@ -69,4 +75,4 @@ class Report(models.Model):
     @property
     def to_url(self):
         """Return the full URL of the report."""
-        return '/reports/{id}'.format(id=self.id)
+        return u'/reports/{id}'.format(id=self.id)

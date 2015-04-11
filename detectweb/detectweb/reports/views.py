@@ -38,7 +38,7 @@ def upload_images(request):
             generate_report.delay(report=report)
             return redirect('show_reports', report_id=report.id)
     else:
-        return render(request, 'reports/image_drop_box.html', {'form': form})
+        return render(request, 'reports/splash_upload.html', {'form': form})
 
 @require_GET
 def index_reports(request):
@@ -51,4 +51,4 @@ def show_reports(request, **params):
     if report.is_finished:
         return render(request, 'reports/show_reports.html', {'report': report})
     else:
-        return render(request, 'reports/not_finished.html', {'report': report})
+        return render(request, 'reports/report_blank.html', {'report': report})
