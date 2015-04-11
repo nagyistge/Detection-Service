@@ -1,9 +1,8 @@
 from __future__ import absolute_import
 
 from django.shortcuts import render, redirect
-from django.template import RequestContext, loader
 
-from django.views.decorators.http import require_http_methods, require_POST, require_GET
+from django.views.decorators.http import require_POST, require_GET
 
 from detectweb.reports.models import Report
 from detectweb.reports.forms import UploadImageForm

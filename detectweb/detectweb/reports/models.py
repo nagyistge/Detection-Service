@@ -37,6 +37,8 @@ class Report(models.Model):
     width = models.PositiveIntegerField(null=True)
 
     ELA_IMG_SUFFIX = '.ela.png'
+    DJCA_IMG_SUFFIX = '.djca.png'
+    DJCU_IMG_SUFFIX = '.djcu.png'
 
     @classmethod
     def find_by_md5(cls, digest):
@@ -78,6 +80,14 @@ class Report(models.Model):
     @property
     def ela_image_url(self):
         return self.original_image_url + Report.ELA_IMG_SUFFIX
+
+    @property
+    def djca_image_url(self):
+        return self.original_image_url + Report.DJCA_IMG_SUFFIX
+
+    @property
+    def djcu_image_url(self):
+        return self.original_image_url + Report.DJCU_IMG_SUFFIX
 
     @property
     def to_url(self):
