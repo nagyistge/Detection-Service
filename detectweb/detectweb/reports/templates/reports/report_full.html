@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -9,10 +10,10 @@
     <meta name="author" content="Omar Ramadan, Anthony Sutardja, Yan Zhao" />
 
     <!-- Style sheets -->
-    <link href="./static/assets/css/bootstrap.css" rel="stylesheet" />
-    <link href="./static/css/main.css" rel="stylesheet" />
+    <link href="{% static "assets/css/bootstrap.css" %}" rel="stylesheet" />
+    <link href="{% static "css/main.css" %}" rel="stylesheet" />
 
-    <title>Report on image</title>
+    <title>Report for {{ report.image_name }}</title>
   </head>
   <body>
     <!-- Header -->
@@ -31,7 +32,7 @@
         <div class="row">
           <div class="col-sm-9 info-name">
             <p class="description">Filename</p>
-            <h4 class="circle-status-done">My_image.jpg</h4>
+            <h4 class="circle-status-done">{{ report.image_name }}</h4>
           </div>
           <div class="col-sm-3 info-date">
             <p class="description">Uploaded on</p>
@@ -43,7 +44,7 @@
         <div class="row image-inspector">
           <div class="col-sm-12">
             <div class="image-holder">
-              <img src="./static/imgs/a.JPG" alt=""/>
+              <img src="{{ report.original_image_url }}" alt=""/>
             </div>
           </div>
 
@@ -70,42 +71,70 @@
         <div class="row">
           <div class="col-sm-12">
             <h4>Metadata</h4>
-            <p class="lead">We did not see any strong indications of tampering due to the metadata.</p>
+            {% if report.exif %}
+              {% if report.has_software_manipulation %}
+                <p class="lead">We detected strong indications of tampering due to photo manipulation software described in the metadata.</p>
+              {% elif report.has_crop_resize or has_size_mismatch %}
+                <p class="lead">We've detected some indication of tampering. However, these changes may be limited to changes in only the image's size.</p>
+              {% elif not report.has_camera_attrs %}
+                <p class="lead">We did not see any strong indications of tampering due to the metadata. Some of the camera metadata is missing but this can be due to compression.</p>
+              {% else %}
+                <p class="lead">We saw no indication of tampering from the metadata.</p>
+              {% endif %}
+            {% else %}
+            <p class="lead">We were unable to find any interesting metadata information on this image.</p>
+            {% endif %}
 
             <p>What's metadata? Metadata is the information stored that describes the photo. Untampered images that are from the camera source will contain certain metadata attributes that are part of the EXIF metadata specification. When an image is resaved in software or on the Internet, the metadata can be removed and/or modified. Hence, we can use this metadata information to check if the image in question has been resaved through other software.</p>
             <br/>
             <br/>
           </div>
         </div>
+
+        {% if report.exif %}
         <div class="row">
           <div class="col-sm-4">
             <table class="table small">
-              <tr><td class="b">Make</td><td>Canon</td></tr>
-              <tr><td class="b">Model</td><td>Canon EOS REBEL T1i</td></tr>
-              <tr><td class="b">DateTimeOriginal</td><td>2015:03:20 21:19:23</td></tr>
-              <tr><td class="b">F Number</td><td>9.2</td></tr>
-              <tr><td class="b">ISOSpeedRatings</td><td>1600</td></tr>
-              <tr><td class="b">Metering Mode</td><td>5</td></tr>
-              <tr><td class="b">Focal Length</td><td>1/35</td></tr>
-              <tr><td class="b">Height</td><td>800 pixels</td></tr>
-              <tr><td class="b">Width</td><td>600 pixels</td></tr>
-              <tr><td class="b">Software</td><td>Photos 1.0</td></tr>
+              <tr><td class="b">Make</td><td>{{ report.exif.camera.Make }}</td></tr>
+              <tr><td class="b">Model</td><td>{{ report.exif.camera.Model }}</td></tr>
+              <tr><td class="b">DateTimeOriginal</td><td>{{ report.exif.timestamp.DateTimeOriginal }}</td></tr>
+              <tr><td class="b">F Number</td><td>{{ report.exif.camera.FNumber }}</td></tr>
+              <tr><td class="b">ISOSpeedRatings</td><td>{{ report.exif.camera.ISOSpeedRatings }}</td></tr>
+              <tr><td class="b">Metering Mode</td><td>{{ report.exif.camera.MeteringMode }}</td></tr>
+              <tr><td class="b">Focal Length</td><td>{{ report.exif.camera.FocalLength }}</td></tr>
+              <tr><td class="b">Height</td><td>{{ report.height }} pixels</td></tr>
+              <tr><td class="b">Width</td><td>{{ report.width }} pixels</td></tr>
+              <tr><td class="b">Software</td><td>{{ report.exif.software.Software }}</td></tr>
             </table>
           </div>
           <div class="col-sm-8">
             <ul class="detection-checklist">
-              <li class="good">No detection of software manipulation.</li>
-              <li class="good">Has expected camera EXIF attributes.</li>
-              <!--
-              <li class="good">No image size mismatch in metadata.</li>
-              <li class="good">No indication of cropping or resizing.</li>
-              <li class="bad">Detected software manipulation.</li>
-              <li class="bad">Missing some camera EXIF attributes.</li>-->
-              <li class="bad">Inconsistent image size information.</li>
-              <li class="bad">Detected cropping and/or resizing.</li>
+              {% if report.has_software_manipulation %}
+                <li class="bad">Detected software manipulation.</li>
+              {% else %}
+                <li class="good">No detection of software manipulation.</li>
+              {% endif %}
+
+              {% if report.has_camera_attrs %}
+                <li class="good">Has expected camera EXIF attributes.</li>
+              {% else %}
+                <li class="bad">Missing some camera EXIF attributes.</li>
+              {% endif %}
+
+              {% if report.has_size_mismatch %}
+                <li class="bad">Inconsistent image size information.</li>
+              {% else %}
+                <li class="good">No image size mismatch in metadata.</li>
+              {% endif %}
+              {% if report.has_crop_resize %}
+                <li class="bad">Detected cropping and/or resizing.</li>
+              {% else %}
+                <li class="good">No indication of cropping or resizing.</li>
+              {% endif %}
             </ul>
           </div>
         </div>
+        {% endif %}
 
         <!-- ELA -->
         <div class="row">
@@ -147,9 +176,9 @@
 
     <!-- JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
-    <script src="./static/assets/js/holder.min.js"></script>
+    <script src="{% static "assets/js/holder.min.js" %}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src="./static/assets/js/bootstrap.min.js"></script>
+    <script src="{% static "assets/js/bootstrap.min.js" %}"></script>
 
     <script>
     $(document).ready(function() {

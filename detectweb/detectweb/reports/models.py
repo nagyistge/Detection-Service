@@ -68,6 +68,10 @@ class Report(models.Model):
         return json.dumps(self.cm_matches)
 
     @property
+    def exif_as_json(self):
+        return json.dumps(self.exif)
+
+    @property
     def original_image_url(self):
         """Return the full URL to the primary image of this report."""
         return self.image_file.url

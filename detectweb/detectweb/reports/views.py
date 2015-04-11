@@ -49,6 +49,10 @@ def index_reports(request):
 def show_reports(request, **params):
     report = Report.objects.get(id=params['report_id'])
     if report.is_finished:
-        return render(request, 'reports/show_reports.html', {'report': report})
+        return render(
+            request,
+            'reports/report_full.html',
+            {'report': report},
+        )
     else:
         return render(request, 'reports/report_blank.html', {'report': report})
