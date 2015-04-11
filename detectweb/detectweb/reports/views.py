@@ -18,7 +18,7 @@ def image_drop_box(request):
     return render(
         request,
         'reports/splash_upload.html',
-        {'form': form}
+        {'form': form, 'reports': Report.objects.all()[:16]}
     )
 
 @require_POST

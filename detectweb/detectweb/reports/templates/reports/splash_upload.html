@@ -40,7 +40,9 @@
     </div>
 
     <div class="masonry">
-      <!--<div class="m-item"><a href="#"><img src="" alt="" /></a></div>-->
+      {% for report in reports %}
+      <div class="m-item"><a href="{{ report.to_url }}"><img src="{{ report.original_image_url }}" alt="" /></a></div>
+      {% endfor %}
     </div>
 
     <div class="footer">

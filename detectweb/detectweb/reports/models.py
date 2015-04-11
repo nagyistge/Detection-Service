@@ -46,6 +46,7 @@ class Report(models.Model):
 
     @property
     def base_path(self):
+        """Returns the base path of the images for this report."""
         return '{media_base}/{base_path}/'.format(
             media_base=settings.MEDIA_URL,
             base_path=self.md5_hex_digest,
@@ -62,4 +63,10 @@ class Report(models.Model):
 
     @property
     def original_image_url(self):
+        """Return the full URL to the primary image of this report."""
         return self.image_file.url
+
+    @property
+    def to_url(self):
+        """Return the full URL of the report."""
+        return '/reports/{id}'.format(id=self.id)
