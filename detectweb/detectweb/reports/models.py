@@ -10,6 +10,8 @@ from jsonfield import JSONField
 import collections
 import json
 
+from imforensics.ela import  ELAClassifier
+
 def uploaded_file_name(instance, filename):
     return '/'.join([
          instance.md5_hex_digest,
@@ -36,7 +38,7 @@ class Report(models.Model):
     height = models.PositiveIntegerField(null=True)
     width = models.PositiveIntegerField(null=True)
 
-    ela_result = models.CharField(max_length=255, null=True)
+    ela_result = models.IntegerField(null=True)
 
     ELA_IMG_SUFFIX = '.ela.png'
     DJCA_IMG_SUFFIX = '.djca.png'
@@ -65,6 +67,22 @@ class Report(models.Model):
     def file_path(self):
         """Return the file path to the image on disk."""
         return self.image_file.path
+
+    @property
+    def is_ela_sure_auth(self):
+        return self.ela_result == ELAClassifier.SURE_AUTH_FLAG
+
+    @property
+    def is_ela_maybe_auth(self):
+        return self.ela_result == ELAClassifier.NOT_SURE_AUTH_FLAG
+
+    @property
+    def is_ela_maybe_fake(self):
+        return self.ela_result == ELAClassifier.NOT_SURE_FAKE_FLAG
+
+    @property
+    def is_ela_sure_fake(self):
+        return self.ela_result == ELAClassifier.SURE_FAKE_FLAG
 
     @property
     def cm_matches_as_json(self):

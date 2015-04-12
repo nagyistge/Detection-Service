@@ -41,20 +41,10 @@ class ImageAnalyzer(object):
         self._log('------Doing ela------')
         e = ela.ELA(img_file)
         ec = ela.ELAClassifier()
-        result = ec.predict_message(e)
-        if result == ela.ELAClassifier.SURE_AUTH_MSG:
-            self.report.ela_result = \
-                "We are sure the image is authentic based on error level analysis."
-        elif result == ela.ELAClassifier.NOT_SURE_AUTH_MSG:
-            self.report.ela_result = \
-                "We think the image might be authentic based on error level analysis."
-        elif result == ela.ELAClassifier.NOT_SURE_FAKE_MSG:
-            self.report.ela_result = \
-                "We think the image might be manipulated based on error level analysis."
-        elif result == ela.ELAClassifier.SURE_FAKE_MSG:
-            self.report.ela_result = \
-                "We are sure the image has been manipulated based on error level analysis."
-        self._log('ELA Result: {0}'.format(result))
+        msg_result = ec.predict_message(e)
+        flag_result = ec.predict_flag(e)
+        self.report.ela_result = flag_result
+        self._log('ELA Result: {0}'.format(msg_result))
         e.save_ela_image()
         return numpy2matlab(e.ela_image_scaled.astype(np.double))
 

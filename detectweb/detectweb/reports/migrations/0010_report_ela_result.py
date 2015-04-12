@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='report',
             name='ela_result',
-            field=models.CharField(max_length=255, null=True),
+            field=models.IntegerField(null=True),
             preserve_default=True,
         ),
     ]
