@@ -176,7 +176,38 @@
         <div class="row">
           <div class="col-sm-12">
             <h4>Higher Order Statistics</h4>
-            <p class="lead">Did we find some shit here? FUCK YEAH</p>
+            <p>Images contain regular statistical patterns that are perturbed when manipulated. This technique analyzes
+                the first four statistical moments of each 16x16 block in an image to identify whether it may have been
+                manipulated.
+            </p>
+            <div id="copy-move-vis">
+              <img src="{{ report.hos_image_hover_url }}" alt="Higher order statistics" />
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Double JPEG -->
+        <div class="row">
+          <div class="col-sm-12">
+            <h4>Double JPEG Compression</h4>
+            <p>Most digital images are saved as JPEG, a compressed image format. Artists typically merge pieces
+                from multiple JPEGs to create a single manipulated photo. We can identify which portions have been spliced into
+                an image because they will be compressed twice and leave behind a unique fingerprint. Below are heat maps
+                that display the likelihood of the presence of artifacts with the assumptions that the manipulated region
+                is aligned and unaligned. In an aligned JPEG, the manipulated artifact is single compressed and the background
+                is double compressed, while in an unaligned JPEG, the manipulated region is double compressed.
+            </p>
+            {%  if report.is_jpeg %}
+            <div id="copy-move-vis">
+              <img src="{{ report.djca_image_hover_url }}" alt="Double JPEG Aligned" />
+            </div>
+            <div id="copy-move-vis">
+              <img src="{{ report.djcu_image_hover_url }}" alt="Double JPEG Unaligned" />
+            </div>
+            {% else %}
+            <p class="lead">Double JPEG compression analysis is only available to JPEG files.</p>
+            {% endif %}
           </div>
         </div>
 

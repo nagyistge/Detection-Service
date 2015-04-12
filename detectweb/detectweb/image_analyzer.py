@@ -6,12 +6,13 @@ import numpy as np
 import matlab.engine
 
 from imforensics import *
-from imforensics.util import numpy2matlab, is_jpeg
+from imforensics.util import numpy2matlab, is_jpeg, load_matlab_util
 
 class ImageAnalyzer(object):
 
     def __init__(self, logger=None):
         self.eng = matlab.engine.start_matlab()
+        load_matlab_util(self.eng)
         self.logger = logger
 
     def analyze(self, report):

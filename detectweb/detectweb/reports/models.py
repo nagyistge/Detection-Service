@@ -10,7 +10,8 @@ from jsonfield import JSONField
 import collections
 import json
 
-from imforensics.ela import  ELAClassifier
+from imforensics.ela import ELAClassifier
+from imforensics.util import is_jpeg
 
 def uploaded_file_name(instance, filename):
     return '/'.join([
@@ -43,6 +44,7 @@ class Report(models.Model):
     ELA_IMG_SUFFIX = '.ela.png'
     DJCA_IMG_SUFFIX = '.djca.png'
     DJCU_IMG_SUFFIX = '.djcu.png'
+    HOS_IMG_SUFFIX = '.hos.png'
 
     @classmethod
     def find_by_md5(cls, digest):
@@ -67,6 +69,10 @@ class Report(models.Model):
     def file_path(self):
         """Return the file path to the image on disk."""
         return self.image_file.path
+
+    @property
+    def is_jpeg(self):
+        return is_jpeg(self.file_path)
 
     @property
     def is_ela_sure_auth(self):
@@ -111,8 +117,24 @@ class Report(models.Model):
         return self.original_image_url + Report.DJCA_IMG_SUFFIX
 
     @property
+    def djca_image_hover_url(self):
+        return self.original_image_url + '.hover' + Report.DJCA_IMG_SUFFIX
+
+    @property
     def djcu_image_url(self):
         return self.original_image_url + Report.DJCU_IMG_SUFFIX
+
+    @property
+    def djcu_image_hover_url(self):
+        return self.original_image_url + '.hover' + Report.DJCU_IMG_SUFFIX
+
+    @property
+    def hos_image_url(self):
+        return self.original_image_url + Report.HOS_IMG_SUFFIX
+
+    @property
+    def hos_image_hover_url(self):
+        return self.original_image_url + '.hover' + Report.HOS_IMG_SUFFIX
 
     @property
     def to_url(self):
