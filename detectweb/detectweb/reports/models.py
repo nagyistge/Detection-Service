@@ -36,6 +36,8 @@ class Report(models.Model):
     height = models.PositiveIntegerField(null=True)
     width = models.PositiveIntegerField(null=True)
 
+    ela_result = models.CharField(max_length=255, null=True)
+
     ELA_IMG_SUFFIX = '.ela.png'
     DJCA_IMG_SUFFIX = '.djca.png'
     DJCU_IMG_SUFFIX = '.djcu.png'
