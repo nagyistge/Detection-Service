@@ -12,6 +12,7 @@
     <!-- Style sheets -->
     <link href="{% static "assets/css/bootstrap.css" %}" rel="stylesheet" />
     <link href="{% static "css/main.css" %}" rel="stylesheet" />
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.0/css/bootstrap-toggle.min.css" rel="stylesheet">
 
     <title>Report for {{ report.image_name }}</title>
   </head>
@@ -209,6 +210,11 @@
         <div class="row">
           <div class="col-sm-12">
             <h4>Double JPEG Compression</h4>
+          </div>
+
+        </div>
+        <div class="row">
+          <div class="col-sm-9">
             <p>Most digital images are saved as JPEG, a compressed image format. Artists typically merge pieces
                 from multiple JPEGs to create a single manipulated photo. We can identify which portions have been spliced into
                 an image because they will be compressed twice and leave behind a unique fingerprint. Below are heat maps
@@ -216,6 +222,14 @@
                 is aligned and unaligned. In an aligned JPEG, the manipulated artifact is single compressed and the background
                 is double compressed, while in an unaligned JPEG, the manipulated region is double compressed.
             </p>
+
+          </div>
+          <div class="col-sm-3" style="text-align: left;">
+              <input id="djc-tog" type="checkbox" checked data-toggle="toggle" data-on="Aligned" data-off="Not Aligned" data-onstyle="primary" data-offstyle="info" data-height="50">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
             {%  if report.is_jpeg %}
             <div id="djca" class="vis-wrap">
               <img class="fg-im" src="{{ report.djca_image_url }}" alt="Double JPEG Aligned" />
@@ -250,6 +264,7 @@
     <script src="{% static "assets/js/holder.min.js" %}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="{% static "assets/js/bootstrap.min.js" %}"></script>
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.0/js/bootstrap-toggle.min.js"></script>
 
     <script>
     var cmData = {{ report.cm_matches_as_json | safe }};
@@ -263,6 +278,7 @@
             .style('left', 0);
         this.setupEvents();
         this.opacity = 0.5;
+        this.drawHover();
     };
 
     ImageMash.prototype.setupEvents = function() {
@@ -279,8 +295,10 @@
     };
 
     ImageMash.prototype.drawHover = function () {
+      var x = (d3.event !== null ) ? d3.event.layerX : -100;
+      var y = (d3.event !== null ) ? d3.event.layerY : -100;
       this.foregroundSelection
-            .style('clip', this.rectSyntaxGenerator(d3.event.layerX, d3.event.layerY))
+            .style('clip', this.rectSyntaxGenerator(x, y))
             .style('opacity', this.opacity);
     };
 
@@ -367,6 +385,7 @@
 
       var ela = d3.select('#ela');
       var elaMash = new ImageMash(ela.select('.bg-im'), ela.select('.fg-im'));
+      elaMash.opacity = 1.0;
 
       var djca = d3.select('#djca');
       var djcaMash = new ImageMash(djca.select('.bg-im'), djca.select('.fg-im'));
@@ -376,6 +395,22 @@
 
       var hos = d3.select('#hos')
       var hosMash = new ImageMash(hos.select('.bg-im'), hos.select('.fg-im'));
+
+      var djcShowAligned = false;
+      var djcToggle = function(){
+        djcShowAligned = !djcShowAligned;
+        if (djcShowAligned) {
+          djca.style('display', 'none');
+          djcu.style('display', 'block');
+        } else {
+          djcu.style('display', 'none');
+          djca.style('display', 'block');
+        }
+      };
+      djcToggle();
+      $('#djc-tog').change(djcToggle);
+
+
     });
     </script>
   </body>

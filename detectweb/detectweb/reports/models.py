@@ -75,6 +75,10 @@ class Report(models.Model):
         return is_jpeg(self.file_path)
 
     @property
+    def manipulation_classification(self):
+        return 100
+
+    @property
     def is_ela_sure_auth(self):
         return self.ela_result == ELAClassifier.SURE_AUTH_FLAG
 
