@@ -340,6 +340,9 @@
       .y(function(d) { return d.y; })
       .interpolate("linear");
 
+
+
+
     var drawLines = function (data, imSize, scale)  {
       var svg = d3.select('#copy-move-vis').append('svg')
         .attr('height', imSize.height)
@@ -347,6 +350,25 @@
         .style('position', 'absolute')
         .style('top', '0')
         .style('left', '0');
+
+      var gradient = svg.append("svg:defs")
+        .append("svg:linearGradient")
+          .attr("id", "gradient")
+          .attr("x1", "0%")
+          .attr("y1", "0%")
+          .attr("x2", "100%")
+          .attr("y2", "100%")
+          .attr("spreadMethod", "pad");
+
+      gradient.append("svg:stop")
+          .attr("offset", "0%")
+          .attr("stop-color", "#FFEB3B")
+          .attr("stop-opacity", 1);
+
+      gradient.append("svg:stop")
+          .attr("offset", "100%")
+          .attr("stop-color", "#FFAB00")
+          .attr("stop-opacity", 1);
 
        var lines = svg.selectAll('.lines')
         .data(convertDataToPairs(data, scale));
@@ -357,11 +379,12 @@
            .attr('cx', function(d) { return d.points[0].x })
            .attr('cy', function(d) { return d.points[0].y })
            .attr('r', 2)
-           .attr('fill', '#FFEB3B');
+           .attr('fill', '#FFAB00');
 
        linesEnter.append('path')
            .attr('class', 'lines')
-           .attr('stroke', '#FFEB3B')
+           .style("fill", "none")
+           .style('stroke', 'url(#gradient)')
            .attr('stroke-width', 1)
            .attr('d', function(d) { return lineGen(d.points);});
 
