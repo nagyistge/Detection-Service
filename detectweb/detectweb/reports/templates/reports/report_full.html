@@ -30,11 +30,11 @@
       <div class="container">
         <!-- Report identification information -->
         <div class="row">
-          <div class="col-sm-9 info-name">
+          <div class="col-sm-8 info-name">
             <p class="description">Filename</p>
             <h4 class="circle-status-done">{{ report.image_name }}</h4>
           </div>
-          <div class="col-sm-3 info-date">
+          <div class="col-sm-4 info-date">
             <p class="description">Uploaded on</p>
             <h4>{{ report.uploaded_at }}</h4>
           </div>
@@ -159,6 +159,11 @@
             higher inconsistencies in error level. The ELA image shows the higher error region, which has a higher
             possibility to be manipulted.</p>
 
+            <div id="ela" class="vis-wrap">
+              <img class="bg-im" src="{{ report.ela_image_url }}" alt="ELA Image" />
+              <img class="fg-im" src="{{ report.original_image_url }}" alt="ELA Image" />
+            </div>
+
           </div>
         </div>
 
@@ -178,7 +183,7 @@
             resampling portions of the same image onto other portions of the image to alter the context and even
             enhance the picture. We've developed novel and robust algorithms to detect this attack.</p>
 
-            <div id="copy-move-vis">
+            <div id="copy-move-vis" class="vis-wrap">
               <img src="{{ report.original_image_url }}" alt="Copy move detection" />
             </div>
           </div>
@@ -192,8 +197,9 @@
                 the first four statistical moments of each 16x16 block in an image to identify whether it may have been
                 manipulated.
             </p>
-            <div id="copy-move-vis">
-              <img src="{{ report.hos_image_hover_url }}" alt="Higher order statistics" />
+            <div id="hos" class="vis-wrap">
+              <img class="bg-im" src="{{ report.hos_image_hover_url }}" alt="Higher order statistics" />
+              <img class="fg-im" src="{{ report.original_image_url }}" alt="Higher order statistics" />
             </div>
           </div>
         </div>
@@ -211,11 +217,13 @@
                 is double compressed, while in an unaligned JPEG, the manipulated region is double compressed.
             </p>
             {%  if report.is_jpeg %}
-            <div>
-              <img src="{{ report.djca_image_hover_url }}" alt="Double JPEG Aligned" />
+            <div id="djca" class="vis-wrap">
+              <img class="fg-im" src="{{ report.djca_image_url }}" alt="Double JPEG Aligned" />
+              <img class="bg-im" src="{{ report.djca_image_hover_url }}" alt="Double JPEG Aligned" />
             </div>
-            <div>
-              <img src="{{ report.djcu_image_hover_url }}" alt="Double JPEG Unaligned" />
+            <div id="djcu" class="vis-wrap">
+              <img class="fg-im" src="{{ report.djcu_image_url }}" alt="Double JPEG Unaligned" />
+              <img class="bg-im" src="{{ report.djcu_image_hover_url }}" alt="Double JPEG Unaligned" />
             </div>
             {% else %}
             <p class="lead">Double JPEG compression analysis is only available to JPEG files.</p>
@@ -246,6 +254,48 @@
     <script>
     var cmData = {{ report.cm_matches_as_json | safe }};
 
+    var ImageMash = function (backgroundSelection, foregroundSelection) {
+        this.backgroundSelection = backgroundSelection;
+        this.foregroundSelection = foregroundSelection;
+        this.foregroundSelection
+            .style('position', 'absolute')
+            .style('top', 0)
+            .style('left', 0);
+        this.setupEvents();
+        this.opacity = 0.5;
+    };
+
+    ImageMash.prototype.setupEvents = function() {
+        this.foregroundSelection.on('mousemove', this.drawHover.bind(this));
+        this.backgroundSelection.on('mousemove', this.drawHover.bind(this));
+        this.backgroundSelection.on('mouseout', this.clearHover.bind(this));
+        this.foregroundSelection.on('mouseout', this.clearHover.bind(this));
+        this.foregroundSelection.on('click', this.toggleOpacity.bind(this));
+    };
+
+    ImageMash.prototype.toggleOpacity = function() {
+      this.opacity = (this.opacity === 1) ? 0.5 : 1;
+      this.drawHover();
+    };
+
+    ImageMash.prototype.drawHover = function () {
+      this.foregroundSelection
+            .style('clip', this.rectSyntaxGenerator(d3.event.layerX, d3.event.layerY))
+            .style('opacity', this.opacity);
+    };
+
+    ImageMash.prototype.clearHover = function () {
+        this.foregroundSelection.style('clip', 'rect(0)').style('opacity', 0);
+    };
+
+    ImageMash.prototype.rectSyntaxGenerator = function (x, y) {
+        var PADDING = 50;
+        // top y, right x, bottom y, left x
+        return 'rect(' + (y - PADDING)  + 'px,' + (x + PADDING) + 'px,' + (y + PADDING) + 'px,' + (x - PADDING) + 'px)';
+    };
+
+
+
     var convertDataToPairs = function (data, scale) {
         var pairs = [];
 
@@ -264,7 +314,6 @@
               ]
             });
         }
-      console.log(pairs);
         return pairs;
     };
 
@@ -308,12 +357,25 @@
     };
 
     $(document).ready(function() {
+      // Copy Move Setup
       var im = d3.select('#copy-move-vis img').node();
       var imSize = im.getBoundingClientRect();
 
       var originalWidth = im.naturalWidth;
       var scaling = parseFloat(imSize.width) / parseFloat(originalWidth);
       drawLines(cmData, imSize, scaling);
+
+      var ela = d3.select('#ela');
+      var elaMash = new ImageMash(ela.select('.bg-im'), ela.select('.fg-im'));
+
+      var djca = d3.select('#djca');
+      var djcaMash = new ImageMash(djca.select('.bg-im'), djca.select('.fg-im'));
+
+      var djcu = d3.select('#djcu');
+      var djcuMash = new ImageMash(djcu.select('.bg-im'), djcu.select('.fg-im'));
+
+      var hos = d3.select('#hos')
+      var hosMash = new ImageMash(hos.select('.bg-im'), hos.select('.fg-im'));
     });
     </script>
   </body>

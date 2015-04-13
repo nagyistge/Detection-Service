@@ -245,6 +245,12 @@ td.b {
     margin-bottom: 30px;
 }
 
-#copy-move-vis img {
+.vis-wrap {
+    margin-top: 20px;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.vis-wrap img{
     width: 100%;
 }
