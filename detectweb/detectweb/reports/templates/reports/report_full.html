@@ -278,11 +278,11 @@
            .attr('cx', function(d) { return d.points[0].x })
            .attr('cy', function(d) { return d.points[0].y })
            .attr('r', 2)
-           .attr('fill', 'yellow');
+           .attr('fill', '#FFEB3B');
 
        linesEnter.append('path')
            .attr('class', 'lines')
-           .attr('stroke', 'yellow')
+           .attr('stroke', '#FFEB3B')
            .attr('stroke-width', 1)
            .attr('d', function(d) { return lineGen(d.points);});
 
@@ -291,7 +291,7 @@
            .attr('cx', function(d) { return d.points[1].x })
            .attr('cy', function(d) { return d.points[1].y })
            .attr('r', 2)
-           .attr('fill', 'yellow');
+           .attr('fill', '#FFEB3B');
 
     };
 
