@@ -140,7 +140,19 @@
         <div class="row">
           <div class="col-sm-12">
             <h4>Error Level Analysis</h4>
-            <p class="lead">{{ report.ela_result }}</p>
+            {% if report.is_ela_sure_auth %}
+            <p class="lead">This image has nothing unusual in this image's error level analysis. This
+              image matches a real image's typical error levels.</p>
+            {% elif report.is_ela_maybe_auth %}
+            <p class="lead">This image has slightly higher amounts of error than normal. This image
+              is probably the real image.</p>
+            {% elif report.is_ela_maybe_fake %}
+            <p class="lead">This image has more error than we typically expect. Treat this image
+              with caution as it might be manipulated.</p>
+            {% else %}
+            <p class="lead">This image has an unexpectedly high amount of error. This image was
+              probably resaved with some alterations made to the image.</p>
+            {% endif %}
 
             <p>Error level analysis is a technique used to measure the inconsistencies of error level among different
             regions of a given image. Because JPEG compression is a lossy compression, manipulated image will have a
@@ -199,10 +211,10 @@
                 is double compressed, while in an unaligned JPEG, the manipulated region is double compressed.
             </p>
             {%  if report.is_jpeg %}
-            <div id="copy-move-vis">
+            <div>
               <img src="{{ report.djca_image_hover_url }}" alt="Double JPEG Aligned" />
             </div>
-            <div id="copy-move-vis">
+            <div>
               <img src="{{ report.djcu_image_hover_url }}" alt="Double JPEG Unaligned" />
             </div>
             {% else %}
