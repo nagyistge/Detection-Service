@@ -41,7 +41,7 @@ class Report(models.Model):
 
     ela_result = models.IntegerField(null=True)
 
-    ELA_IMG_SUFFIX = '.ela.png'
+    ELA_IMG_SUFFIX = '.ela_suspect.jpeg'
     DJCA_IMG_SUFFIX = '.djca.png'
     DJCU_IMG_SUFFIX = '.djcu.png'
     HOS_IMG_SUFFIX = '.hos.png'
