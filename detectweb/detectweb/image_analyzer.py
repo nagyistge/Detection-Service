@@ -47,7 +47,7 @@ class ImageAnalyzer(object):
         self.report.ela_result = flag_result
         self._log('ELA Result: {0}'.format(msg_result))
         e.save_ela_image()
-        e.save_suspect_region()
+        e.save_suspect_region(True)
         return numpy2matlab(e.ela_image_scaled.astype(np.double))
 
     def _do_higher_order(self, img_file):
