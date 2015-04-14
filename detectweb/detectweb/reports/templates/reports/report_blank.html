@@ -87,11 +87,15 @@
 
       // Scan motion function
       var scanMotion = function() {
+        var im = d3.select('.image-inspector img');
+        var nodeBox = im.node().getBoundingClientRect();
+
         var movePosition = onLeft ? nodeBox.width : 0;
         line.transition().duration(2000)
-          .style('left', movePosition + 'px');
+          .style('left', movePosition + 'px')
+          .style('height', nodeBox.height + 'px');
         onLeft = !onLeft;
-      }
+      };
 
       // Run every 2 seconds
       setInterval(scanMotion, 2000);

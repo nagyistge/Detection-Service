@@ -254,3 +254,13 @@ td.b {
 .vis-wrap img{
     width: 100%;
 }
+
+span.vis-color-secondary {
+    color: #FFC400;
+    font-weight: bolder;
+}
+
+span.vis-color-primary {
+    color: #FF1744;
+    font-weight: bolder;
+}

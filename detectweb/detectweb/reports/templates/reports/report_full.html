@@ -156,9 +156,14 @@
             {% endif %}
 
             <p>Error level analysis is a technique used to measure the inconsistencies of error level among different
-            regions of a given image. Because JPEG compression is a lossy compression, manipulated image will have a
-            higher inconsistencies in error level. The ELA image shows the higher error region, which has a higher
-            possibility to be manipulted.</p>
+            regions of a given image. Because JPEG compression is a lossy compression, manipulated images will have
+            higher inconsistencies in error level.</p>
+
+            <p>Our ELA visualization shows regions with the highest errors in
+              <span class="vis-color-secondary">yellow</span>, which signifies that the region has a
+              higher possibility of having been manipulated. Our visualization also shows regions of high error
+              and low frequency in <span class="vis-color-primary">magenta</span>, which warrants an even closer look
+              since low frequency regions should not have a high error.</p>
 
             <div id="ela" class="vis-wrap">
               <img class="bg-im" src="{{ report.ela_image_url }}" alt="ELA Image" />
@@ -408,7 +413,6 @@
 
       var ela = d3.select('#ela');
       var elaMash = new ImageMash(ela.select('.bg-im'), ela.select('.fg-im'));
-      elaMash.opacity = 1.0;
 
       var djca = d3.select('#djca');
       var djcaMash = new ImageMash(djca.select('.bg-im'), djca.select('.fg-im'));
