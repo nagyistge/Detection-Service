@@ -81,6 +81,12 @@ class ImageAnalyzer(object):
                 self._log('------Doing double jpeg------')
                 d = doublejpeg.DoubleJPEGCompressionDetector(self.eng)
                 d.detect(img_file)
+                self.report.djca_score = \
+                    doublejpeg.find_max_blob_size(self.report.file_path +
+                                                  self.report.DJCA_HOVER_IMG_SUFFIX)
+                self.report.djcu_score = \
+                    doublejpeg.find_max_blob_size(self.report.file_path +
+                                                  self.report.DJCU_HOVER_IMG_SUFFIX)
         except Exception as e:
             self._log(e.message)
 

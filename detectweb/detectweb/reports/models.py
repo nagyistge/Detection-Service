@@ -41,10 +41,16 @@ class Report(models.Model):
 
     ela_result = models.IntegerField(null=True)
 
+    djca_score = models.FloatField(null=True)
+    djcu_score = models.FloatField(null=True)
+
     ELA_IMG_SUFFIX = '.ela_suspect.jpeg'
     DJCA_IMG_SUFFIX = '.djca.png'
     DJCU_IMG_SUFFIX = '.djcu.png'
     HOS_IMG_SUFFIX = '.hos.png'
+    DJCA_HOVER_IMG_SUFFIX = '.hover' + DJCA_IMG_SUFFIX
+    DJCU_HOVER_IMG_SUFFIX = '.hover' + DJCU_IMG_SUFFIX
+    HOS_HOVER_IMG_SUFFIX = '.hover' + HOS_IMG_SUFFIX
 
     @classmethod
     def find_by_md5(cls, digest):
@@ -122,7 +128,7 @@ class Report(models.Model):
 
     @property
     def djca_image_hover_url(self):
-        return self.original_image_url + '.hover' + Report.DJCA_IMG_SUFFIX
+        return self.original_image_url + Report.DJCA_HOVER_IMG_SUFFIX
 
     @property
     def djcu_image_url(self):
@@ -130,7 +136,7 @@ class Report(models.Model):
 
     @property
     def djcu_image_hover_url(self):
-        return self.original_image_url + '.hover' + Report.DJCU_IMG_SUFFIX
+        return self.original_image_url + Report.DJCU_HOVER_IMG_SUFFIX
 
     @property
     def hos_image_url(self):
@@ -138,7 +144,7 @@ class Report(models.Model):
 
     @property
     def hos_image_hover_url(self):
-        return self.original_image_url + '.hover' + Report.HOS_IMG_SUFFIX
+        return self.original_image_url + Report.HOS_HOVER_IMG_SUFFIX
 
     @property
     def to_url(self):
