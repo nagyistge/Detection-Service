@@ -84,6 +84,7 @@ class Report(models.Model):
     def manipulation_classification(self):
         return 100
 
+    """ *** ELA Properties *** """
     @property
     def is_ela_sure_auth(self):
         return self.ela_result == ELAClassifier.SURE_AUTH_FLAG
@@ -100,6 +101,7 @@ class Report(models.Model):
     def is_ela_sure_fake(self):
         return self.ela_result == ELAClassifier.SURE_FAKE_FLAG
 
+    """ *** Copy Move Properties *** """
     @property
     def cm_matches_as_json(self):
         return json.dumps(self.cm_matches)
@@ -109,9 +111,22 @@ class Report(models.Model):
         """Return the number of copymove matches."""
         return len(self.cm_matches['source'])
 
+    """ *** Metadata Properties *** """
     @property
     def exif_as_json(self):
         return json.dumps(self.exif)
+
+    """ *** DJC Properties *** """
+    @property
+    def is_djc_suspicious(self):
+        return self.is_djca_suspicious or self.is_djcu_suspicious
+    @property
+    def is_djca_suspicious(self):
+        return self.djca_score > 0.0125
+
+    @property
+    def is_djcu_suspicious(self):
+        return self.djcu_score > 0.0125
 
     @property
     def original_image_url(self):

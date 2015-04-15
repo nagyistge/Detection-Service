@@ -215,6 +215,12 @@
         <div class="row">
           <div class="col-sm-12">
             <h4>Double JPEG Compression</h4>
+            {% if report.is_djc_suspicious %}
+            <p class="lead">Our analysis shows unusually high number of regions in the double JPEG compression analysis.
+              It is very possible that this image has been manipulated.</p>
+            {% else %}
+            <p class="lead">Our analysis did not find anything of significance in the double JPEG compression analysis.</p>
+            {% endif %}
           </div>
 
         </div>
