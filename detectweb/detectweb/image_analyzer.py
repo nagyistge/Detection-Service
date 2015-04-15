@@ -55,7 +55,8 @@ class ImageAnalyzer(object):
     def _do_higher_order(self, img_file):
         try:
             self._log('------Doing higher order stats------')
-            higherorderstats.HigherOrderStatsDetector(self.eng)
+            higherorderstats.HigherOrderStatsDetector(self.eng)\
+                .detect(img_file)
         except Exception as e:
             self._log(e.message)
 
