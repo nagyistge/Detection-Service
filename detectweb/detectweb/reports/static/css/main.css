@@ -74,6 +74,7 @@ html, body {
 
 .masonry .m-item img {
   width: 100%;
+  border: 1px #263238 solid;
 }
 
 .masonry .m-item img:hover {
