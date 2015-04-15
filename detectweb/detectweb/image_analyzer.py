@@ -48,7 +48,7 @@ class ImageAnalyzer(object):
             e.save_ela_image()
             e.save_suspect_region(True,
                                   low_risk_color=(255, 196, 0),
-                                  high_risk_color=(255, 171, 0))
+                                  high_risk_color=(255, 23, 68))
         except Exception as e:
             self._log(e.message)
 
